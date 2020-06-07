@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+	margin: 0;
+	line-height: 1;
+}
+
+#all {
+	position: relative;
+	width: 590px;
+	height: 470PX;
+	margin: 0 auto;
+}
+
+.slide {
+	display: none;
+	width: 590px;
+	height: 470PX;
+	position: absolute;
+}
+
+.button {
+	position: absolute;
+	width: 152px;
+	height: px;
+	left: 40px;
+	bottom: 20px;
+}
+
+.bth {
+	opacity: 0.8;
+	width: 6px;
+	height: 6px;
+	float: left;
+	border: 2px solid #F0EDED;
+	border-radius: 5px;
+	margin-right: 8px;
+}
+
+.active {
+	opacity: 7;
+	background-color: #FFFFFF;
+	border-color: #FFFFFF;
+}
+
+.tab{
+	position: absolute;
+	width: 24px;
+	height: 40px;
+	font-size: 20px;
+	line-height: 40px;
+	cursor: pointer;
+	top: 48%;
+	text-align: center;
+	color: white;
+	background-color: rgba(0,0,0,.5);
+	opacity: 0.4;
+}
+.tab:hover{
+	opacity: .5;
+	color: white;
+	background: black;
+}
+.left {
+	left: 0px;
+}
+
+.right {
+	right: 0px;
+}
+</style>
+</head>
+<body>
+    <div id="all">
+        <div class="slider">
+            <a href="#" class="slide" style="display: block;"><img src="images/11.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/22.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/33.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/44.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/55.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/66.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/77.jpg" alt="" /></a>
+            <a href="#" class="slide"><img src="images/88.jpg" alt="" /></a>
+        </div>
+        <!--点击按钮列表-->
+        <div class="button">
+            <div class="bth active"></div>
+            <div class="bth"></div>
+            <div class="bth"></div>
+            <div class="bth"></div>
+            <div class="bth"></div>
+            <div class="bth"></div>
+            <div class="bth"></div>
+            <div class="bth"></div>
+        </div>
+        <!--左按钮-->
+        <div class="tab left">&lt;</div>
+        <!--右按钮-->
+        <div class="tab right">&gt;</div>
+    </div>
+</body>
+<script src="js/jquery.js"></script>
+<script>
+    	$(document).ready(function() {
+		var index = 0; //定义一个下标
+		var stop = false; //定义一个触发器
+		var $li = $("#all").find(".slider").children(".slide"); //获取所有的轮播图片
+		var $page = $("#all").find(".button").children(".bth"); //获取所有的圆点列表
+		$page.hover(function() {
+			
+			index = $(this).index(); //把图片下标的值赋给定义下标
+			$(this).addClass("active").stop(true,true).siblings().removeClass("active"); //给鼠标选中的圆点列表添加样式
+			$li.eq(index).stop(true,true).fadeIn(1000).siblings().fadeOut(1000); //轮播图片淡入淡出效果
+		});
+		//左边点击按钮
+		$(".left").click(function() {
+			clearInterval(timer);
+			index--;
+			if(index < 0) {
+				index = $li.length-1;
+			}
+			$li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+			$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+		});
+		//右边点击按钮
+		$(".right").click(function(){
+			clearInterval(timer);
+			index++;
+			if(index > $li.length-1) {
+				index = 0;
+			}
+			$li.eq(index).stop(true,true).fadeIn().siblings().fadeOut();
+			$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+		});
+		//自动轮播图片
+		var timer = setInterval(function() {
+			if(stop) return;
+			index++;
+			if(index > $li.length-1) {
+				index = 0;
+			}
+			$li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+			$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+		},3000);
+		//鼠标移入图片内，自动轮播停止
+		$("#all").mousemove(function() {
+			clearInterval(timer);
+		}).mouseout(function() {
+			timer = setInterval(function() {
+				if(stop) return;
+				index++;
+				if(index > $li.length-1) {
+					index = 0;
+				}
+				$li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+				$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+			},3000);
+		});
+	});
+</script>
+</html>
